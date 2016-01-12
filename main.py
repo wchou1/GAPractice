@@ -9,6 +9,7 @@
 from string import printable
 from random import choice, randint
 
+
 def cost(c, a):
   # calculates the distance of chromosome c to goal a
   # using the square of the ascii distance
@@ -17,6 +18,7 @@ def cost(c, a):
     cost += (ord(c[i])-ord(a[i]))**2
   return cost
 
+
 def generator(length):
   # generates a single chromosome
   bases = printable[:-5]
@@ -24,6 +26,7 @@ def generator(length):
   for i in range(length):
     chromosome += choice(bases)
   return chromosome
+
 
 def initialize(n, l, answer):
   # create n random chromosomes of length l
@@ -35,6 +38,7 @@ def initialize(n, l, answer):
     pop.append(C)
   return pop
 
+
 def sort(ls):
   for i in range(1, len(ls)):
     cur = ls[i]
@@ -43,10 +47,11 @@ def sort(ls):
       i -= 1
     ls[i] = cur
 
+
 def date(ls, answer):
   length = len(ls)
   fit = ls[:length/2]
-  if len(fit)%2 == 1:
+  if len(fit) % 2 == 1:
     fit = fit[:-1]
   children = []
   # round one
@@ -57,6 +62,7 @@ def date(ls, answer):
     children.extend(mate(fit[i], fit[-i], answer))
   return children
 
+
 def mate(a, b, answer):
   # random crossover point (seems to work better than midpoint)
   point = randint(1,len(a[0])-2)
@@ -66,16 +72,19 @@ def mate(a, b, answer):
   c2 = b[0][:point]+a[0][point:]
   return [[c1, cost(c1, answer)],[c2, cost(c2, answer)]]
 
+
 def display(g, ls):
   print "Generation: %d" % g
   for i in ls:
     print i
+
 
 def mutate(c, answer):
   pos = randint(0, len(c[0])-1)
   char = choice(printable[:-5])
   new = c[0][:pos]+char+c[0][pos+1:]
   return [new, cost(new, answer)]
+
 
 def environment(Tprob, ls, answer):
   Fprob = 100-Tprob
@@ -89,10 +98,11 @@ def environment(Tprob, ls, answer):
       ls[i] = mutate(ls[i], answer)
   return ls
 
+
 def main():
   # initialize population and store starting chromosomes in list_population
   answer = "Swarthmore College, 500 College Avenue, PA 19081"
-  popSize = 20
+  popSize = 40
   chromLength = len(answer)
   mutateProb = 43
   population = initialize(popSize, chromLength, answer)
@@ -112,5 +122,6 @@ def main():
       if i[1] == 0:
         done = True
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
   main()
